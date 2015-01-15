@@ -37,6 +37,11 @@
                BlueprintName = "Tests"
                ReferencedContainer = "container:NetworkSimple.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "InitialTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

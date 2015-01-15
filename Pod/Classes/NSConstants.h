@@ -9,17 +9,17 @@
 #ifndef NetworkSimple_NSConstants_h
 #define NetworkSimple_NSConstants_h
 
-static NSString * const kContentLengthKey = @"Content-Length";
-static NSString * const kContentTypeKey   = @"Content-Type";
+NSString * const kContentLengthKey;
+NSString * const kContentTypeKey;
 
-NSString * const kHTTPMethodGet    = @"GET";
-NSString * const kHTTPMethodPost   = @"POST";
-NSString * const kHTTPMethodPut    = @"PUT";
-NSString * const kHTTPMethodDelete = @"DELETE";
+NSString * const kHTTPMethodGet;
+NSString * const kHTTPMethodPost;
+NSString * const kHTTPMethodPut;
+NSString * const kHTTPMethodDelete;
 
-NSString * const kContentTypeData      = @"x-www-form-urlencoded";
-NSString * const kContentTypeJSON      = @"application/json";
-NSString * const kContentTypeMultipart = @"multipart/form-data";
+NSString * const kContentTypeData;
+NSString * const kContentTypeJSON;
+NSString * const kContentTypeMultipart;
 
 typedef void(^NSResponseCallback)(NSUInteger statusCode, id responseObject, NSError *error);
 // Used for mutating NSMutableURLRequest before firing

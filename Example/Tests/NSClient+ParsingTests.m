@@ -7,55 +7,50 @@
 //
 
 #import "Kiwi.h"
-#import "NSClient+Request.h"
+#import "NSClient+Parsing.h"
 
-SPEC_BEGIN(NSClientRequestSpec)
+SPEC_BEGIN(NSClientParsingSpec)
 
-describe(@"When creating a request for the root", ^
+describe(@"When parsing JSON", ^
 {
-    __block NSClient *client = [NSClient clientWithScheme:@"http" andHost:@"randomuser.me"];
-    __block NSURL *requestURL = nil;
-    __block NSMutableURLRequest *request = nil;
+    __block NSDictionary *dataDictionary = @{@"first_key" : @"first_value",
+                                             @"array_key" : @[@1, @2, @3]};
     
-    beforeEach(^
-               {
-                   requestURL = [client urlWithEndpoint:@""];
-                   request = [client requestWithURL:requestURL httpMethod:@"GET"];
-               });
-    
-    it(@"the request url should have the suffix '/'", ^
+    it(@"the data should be valid", ^
        {
-           [[requestURL.absoluteString should] endWithString:@"/"];
+           [[[NSClient dataFromJSONObject:dataDictionary] should] beKindOfClass:[NSData class]];
        });
     
-    it(@"the request should have the correct setup", ^
+    it(@"the object should be a dictionary / json object", ^
        {
-           [[request.URL.absoluteString should] endWithString:@"/"];
-           [[request.HTTPMethod should] equal:@"GET"];
+           [[[NSClient jsonObjectFromData:[NSClient dataFromJSONObject:dataDictionary]] should] beKindOfClass:[NSDictionary class]];
        });
     
-    it(@"the request should be mutable", ^
-       {
-           [[request should] beKindOfClass:[NSMutableURLRequest class]];
-       });
+    describe(@"and I pass string data", ^
+             {
+                 it(@"the returned object should be a string", ^
+                    {
+                        [[[NSClient jsonObjectFromData:[NSClient dataFromString:@"Not a json object"]] should] beKindOfClass:[NSString class]];
+                    });
+             });
+    
+    describe(@"and I pass invalid JSON object", ^
+             {
+                 it(@"the returned object should be a string", ^
+                    {
+                        [[[NSClient jsonObjectFromData:[NSClient dataFromString:@"{ \"object\" = \"value\"}}"]] should] beKindOfClass:[NSString class]];
+                    });
+             });
 });
 
-describe(@"When creating a test with parameters", ^
+describe(@"When parsing parameters", ^
 {
-    __block NSClient *client = [NSClient clientWithScheme:@"http" andHost:@"randomuser.me"];
-    __block NSURL *requestURL = nil;
-    __block NSMutableURLRequest *request = nil;
-    
-    beforeEach(^
-               {
-                   requestURL = [client urlWithEndpoint:@"" andParameters:@{@"results" : @"20",
-                                                                            @"seed"    : @"NS"}];
-                   request = [client requestWithURL:requestURL httpMethod:@"GET"];
-               });
-    
-    it(@"the request url should have the suffix '/?results=20&seed=NS'", ^
+    it(@"the returned string should equal '?results=20&seed=NS'", ^
        {
-           [[requestURL.absoluteString should] endWithString:@"/?results=20&seed=NS"];
+           NSDictionary *parameters = @{@"results" : @"20",
+                                        @"seed"    : @"NS"};
+           
+           [[[NSClient stringFromParameters:parameters] should] equal:@"?results=20&seed=NS"];
        });
 });
 

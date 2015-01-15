@@ -7,39 +7,56 @@
 //
 
 #import "Kiwi.h"
-#import "NSClient.h"
+#import "NSClient+Request.h"
 
-SPEC_BEGIN(NSClientSpec)
+SPEC_BEGIN(NSClientRequestSpec)
 
-describe(@"When allocating the client", ^
+describe(@"When creating a request for the root", ^
 {
-    __block NSClient *client = nil;
+    __block NSClient *client = [NSClient clientWithScheme:@"http" andHost:@"randomuser.me"];
+    __block NSURL *requestURL = nil;
+    __block NSMutableURLRequest *request = nil;
     
-    it(@"the host and scheme should be set", ^
-    {
-        client = [NSClient clientWithScheme:@"http" andHost:@"randomuser.me"];
-        
-        [[client.scheme should] equal:@"http"];
-        [[client.host should] equal:@"randomuser.me"];
-    });
+    beforeEach(^
+               {
+                   requestURL = [client urlWithEndpoint:@""];
+                   request = [client requestWithURL:requestURL httpMethod:@"GET"];
+               });
     
-    it(@"a basic request should return data and a status code", ^
-    {
-        __block id data = nil;
-        //__block NSUInteger statusCode = 0;
-        
-        // Client request
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [NSThread sleepForTimeInterval:2.0f];
-            dispatch_async(dispatch_get_main_queue(), ^
-                           {
-                               data = [@"Contents!" dataUsingEncoding:NSUTF8StringEncoding];
-                           });
-        });
-        
-        [[expectFutureValue(data) shouldEventuallyBeforeTimingOutAfter(4.0f)] beNonNil];
-        // Test status code?
-    });
+    it(@"the request url should have the suffix '/'", ^
+       {
+           [[requestURL.absoluteString should] endWithString:@"/"];
+       });
+    
+    it(@"the request should have the correct setup", ^
+       {
+           [[request.URL.absoluteString should] endWithString:@"/"];
+           [[request.HTTPMethod should] equal:@"GET"];
+       });
+    
+    it(@"the request should be mutable", ^
+       {
+           [[request should] beKindOfClass:[NSMutableURLRequest class]];
+       });
+});
+
+describe(@"When creating a request with parameters", ^
+{
+    __block NSClient *client = [NSClient clientWithScheme:@"http" andHost:@"randomuser.me"];
+    __block NSURL *requestURL = nil;
+    __block NSMutableURLRequest *request = nil;
+    
+    beforeEach(^
+               {
+                   requestURL = [client urlWithEndpoint:@"" andParameters:@{@"results" : @"20",
+                                                                            @"seed"    : @"NS"}];
+                   request = [client requestWithURL:requestURL httpMethod:@"GET"];
+               });
+    
+    it(@"the request url should have the suffix '/?results=20&seed=NS'", ^
+       {
+           [[requestURL.absoluteString should] endWithString:@"/?results=20&seed=NS"];
+       });
 });
 
 SPEC_END
