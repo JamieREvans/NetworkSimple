@@ -22,12 +22,8 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6C493FC72BD54F7E56DB9902 /* libPods-NetworkSimple.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F38321CB11240FA20267A00 /* libPods-NetworkSimple.a */; };
-		7D53C45D1A66CE4000A2845A /* NSClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D53C45C1A66CE4000A2845A /* NSClient.m */; };
 		7D53C4601A66CF1300A2845A /* NSClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D53C45F1A66CF1300A2845A /* NSClientTests.m */; };
-		7D53C4631A66D96100A2845A /* NSClient+Request.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D53C4621A66D96100A2845A /* NSClient+Request.m */; };
 		7D53C4651A66DC6600A2845A /* NSClient+RequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D53C4641A66DC6600A2845A /* NSClient+RequestTests.m */; };
-		7D53C4681A67374900A2845A /* NSClient+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D53C4671A67374900A2845A /* NSClient+Parsing.m */; };
-		7D53C46D1A67414800A2845A /* NSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D53C46C1A67414800A2845A /* NSConstants.m */; };
 		7D53C46F1A67488300A2845A /* NSClient+ParsingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D53C46E1A67488300A2845A /* NSClient+ParsingTests.m */; };
 		8D8FAB9238212F1C47AEF3E1 /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84994669B42356E947C3DD7D /* libPods-Tests.a */; };
 /* End PBXBuildFile section */
@@ -69,16 +65,8 @@
 		6B00468FDB009ED1189E8C63 /* Pods-NetworkSimple.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetworkSimple.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NetworkSimple/Pods-NetworkSimple.debug.xcconfig"; sourceTree = "<group>"; };
 		6FDF45996F5DEC5EDF794951 /* NetworkSimple.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = NetworkSimple.podspec; path = ../NetworkSimple.podspec; sourceTree = "<group>"; };
 		7A869EC1CC871F2119F79CAB /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		7D53C45B1A66CE4000A2845A /* NSClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSClient.h; sourceTree = "<group>"; };
-		7D53C45C1A66CE4000A2845A /* NSClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSClient.m; sourceTree = "<group>"; };
 		7D53C45F1A66CF1300A2845A /* NSClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSClientTests.m; sourceTree = "<group>"; };
-		7D53C4611A66D96100A2845A /* NSClient+Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSClient+Request.h"; sourceTree = "<group>"; };
-		7D53C4621A66D96100A2845A /* NSClient+Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSClient+Request.m"; sourceTree = "<group>"; };
 		7D53C4641A66DC6600A2845A /* NSClient+RequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSClient+RequestTests.m"; sourceTree = "<group>"; };
-		7D53C4661A67374900A2845A /* NSClient+Parsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSClient+Parsing.h"; sourceTree = "<group>"; };
-		7D53C4671A67374900A2845A /* NSClient+Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSClient+Parsing.m"; sourceTree = "<group>"; };
-		7D53C46B1A6739FD00A2845A /* NSConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSConstants.h; sourceTree = "<group>"; };
-		7D53C46C1A67414800A2845A /* NSConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSConstants.m; sourceTree = "<group>"; };
 		7D53C46E1A67488300A2845A /* NSClient+ParsingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSClient+ParsingTests.m"; sourceTree = "<group>"; };
 		84994669B42356E947C3DD7D /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BF82F50461BD2B0E43DD714 /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -154,14 +142,6 @@
 				6003F5A2195388D20070C39A /* Main_iPad.storyboard */,
 				6003F5A5195388D20070C39A /* NSViewController.h */,
 				6003F5A6195388D20070C39A /* NSViewController.m */,
-				7D53C46B1A6739FD00A2845A /* NSConstants.h */,
-				7D53C46C1A67414800A2845A /* NSConstants.m */,
-				7D53C45B1A66CE4000A2845A /* NSClient.h */,
-				7D53C45C1A66CE4000A2845A /* NSClient.m */,
-				7D53C4661A67374900A2845A /* NSClient+Parsing.h */,
-				7D53C4671A67374900A2845A /* NSClient+Parsing.m */,
-				7D53C4611A66D96100A2845A /* NSClient+Request.h */,
-				7D53C4621A66D96100A2845A /* NSClient+Request.m */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
@@ -387,11 +367,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D53C4681A67374900A2845A /* NSClient+Parsing.m in Sources */,
-				7D53C46D1A67414800A2845A /* NSConstants.m in Sources */,
-				7D53C4631A66D96100A2845A /* NSClient+Request.m in Sources */,
 				6003F59E195388D20070C39A /* NSAppDelegate.m in Sources */,
-				7D53C45D1A66CE4000A2845A /* NSClient.m in Sources */,
 				6003F5A7195388D20070C39A /* NSViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);
