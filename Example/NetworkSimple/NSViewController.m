@@ -7,7 +7,7 @@
 //
 
 #import "NSViewController.h"
-#import <NetworkSimple/NSClient+Parsing.h>
+#import <NetworkSimple/NSClient.h>
 
 @interface NSViewController ()
 
@@ -18,7 +18,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
     
     NSClient *client = [NSClient clientWithScheme:@"http" andHost:@"randomuser.me"];
     
@@ -49,9 +48,9 @@
     [client sendRequestWithEndpoint:@""
                      httpMethodType:NSHTTPMethodTypePost
                         requestType:NSRequestTypeJSON
-                         dataObject:[NSClient dataFromJSONObject:@{@"firstName"   : @"Jamie",
-                                                                   @"lastName"    : @"Evans",
-                                                                   @"phoneNumber" : @"555-555-5555"}]
+                         dataObject:@{@"firstName"   : @"Jamie",
+                                      @"lastName"    : @"Evans",
+                                      @"phoneNumber" : @"555-555-5555"}
                requestMutationBlock:^(NSMutableURLRequest *request)
      {
          [request setValue:@"cbeiqu829fPamfr12adkjln" forHTTPHeaderField:@"client_token"];

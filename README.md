@@ -48,18 +48,12 @@ To make a simple URL request, you can perform the following
 
 For a more complicated request, lets send a POST request with JSON body data. We'll also set an HTTP header in the requestMutationBlock - this is always fired last in the request generation.
 
-First, let's import our parsing methods by swapping out the original import
-
-		#import <NetworkSimple/NSClient+Parsing.h>
-
-Next, lets create and fire the request
-
 		[client sendRequestWithEndpoint:@""
 		                     httpMethodType:NSHTTPMethodTypePost
 		                        requestType:NSRequestTypeJSON
-		                         dataObject:[NSClient dataFromJSONObject:@{@"firstName"   : @"Jamie",
-		                                                                   @"lastName"    : @"Evans",
-		                                                                   @"phoneNumber" : @"555-555-5555"}]
+		                         dataObject:@{@"firstName"   : @"Jamie",
+                                          @"lastName"    : @"Evans",
+                                          @"phoneNumber" : @"555-555-5555"}
 		               requestMutationBlock:^(NSMutableURLRequest *request)
 		     {
 		         [request setValue:@"cbeiqu829fPamfr12adkjln" forHTTPHeaderField:@"client_token"];

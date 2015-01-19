@@ -23,7 +23,7 @@
 - (void)sendRequest:(NSMutableURLRequest *)request withResponseCallback:(NSResponseCallback)callback
 {
     // If the network isn't reachable, don't perform request
-    if([Reachability reachabilityForInternetConnection].isReachable)
+    if(![Reachability reachabilityForInternetConnection].isReachable)
     {
         callback(0, nil, [NSError errorWithDomain:@"Could not reach network." code:0 userInfo:nil]);
         return;
