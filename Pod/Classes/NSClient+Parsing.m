@@ -7,6 +7,7 @@
 //
 
 #import "NSClient+Parsing.h"
+#import "NSJSONSerialization+RemovingNulls.h"
 
 const NSString *lineBreakString = @"\r\n";
 
@@ -102,7 +103,7 @@ const NSString * kContentDispositionKey = @"Content-Disposition";
 + (id)jsonObjectFromData:(NSData *)data
 {
     return (!data ? nil :
-            ([NSJSONSerialization JSONObjectWithData:data options:0 error:nil] ? :
+            ([NSJSONSerialization JSONObjectWithData:data options:0 error:nil removingNulls:YES ignoreArrays:NO] ? :
              [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]));
 }
 

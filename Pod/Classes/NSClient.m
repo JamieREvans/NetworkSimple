@@ -8,6 +8,7 @@
 
 #import "NSClient+Parsing.h"
 #import "NSClient+Request.h"
+#import "Reachability.h"
 
 @implementation NSClient
 
@@ -21,6 +22,13 @@
 
 - (void)sendRequest:(NSMutableURLRequest *)request withResponseCallback:(NSResponseCallback)callback
 {
+    // If the network isn't reachable, don't perform request
+    if([Reachability reachabilityForInternetConnection].isReachable)
+    {
+        callback(0, nil, [NSError errorWithDomain:@"Could not reach network." code:0 userInfo:nil]);
+        return;
+    }
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
                    {
                        NSURLResponse *response = nil;
