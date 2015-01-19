@@ -13,6 +13,12 @@ const NSString *lineBreakString = @"\r\n";
 
 const NSString * kContentDispositionKey = @"Content-Disposition";
 
+#if TARGET_OS_IPHONE
+#define IMAGE_CLASS [UIImage class]
+#elif TARGET_OS_MAC
+#define IMAGE_CLASS [NSImage class]
+#endif
+
 @implementation NSClient (Parsing)
 
 #pragma mark - To Data -
@@ -47,12 +53,18 @@ const NSString * kContentDispositionKey = @"Content-Disposition";
             [multipartString appendFormat:@"%@%@", object, lineBreakString];
             [multipartData appendData:[[self class] dataFromString:multipartString]];
         }
-        else if([object isKindOfClass:[UIImage class]])
+        else if([object isKindOfClass:IMAGE_CLASS])
         {
             [multipartString appendFormat:@"%@: form-data; name=\"%@\"; filename=\"webshare.jpg\"%@", kContentDispositionKey, key, lineBreakString];
             [multipartString appendFormat:@"%@: image/jpeg%@%@", kContentTypeKey, lineBreakString, lineBreakString];
             [multipartData appendData:[[self class] dataFromString:multipartString]];
+            
+#if TARGET_OS_IPHONE
             [multipartData appendData:UIImageJPEGRepresentation((UIImage *)object, 1.0f)];
+#elif TARGET_OS_MAC
+            [multipartData appendData:[(NSImage *)object TIFFRepresentation]];
+#endif
+            
             [multipartData appendData:[[self class] dataFromString:lineBreakString.copy]];
         }
         else if([object isKindOfClass:[NSArray class]] || [object isKindOfClass:[NSDictionary class]])
