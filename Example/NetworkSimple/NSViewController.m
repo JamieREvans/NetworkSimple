@@ -21,6 +21,8 @@
     
     NSClient *client = [NSClient clientWithScheme:@"http" andHost:@"randomuser.me"];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseHeadersHandler:) name:kResponseHeadersNotification object:client];
+    
     [client setRequestTimeout:10.0f];
     
     [client setCachingPolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData];
@@ -69,10 +71,10 @@
     }];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)responseHeadersHandler:(NSNotification *)notification
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    NSDictionary *responseHeaders = notification.userInfo[kResponseHeadersKey];
+    NSLog(@"Response Headers:\n\n%@", responseHeaders);
 }
 
 @end

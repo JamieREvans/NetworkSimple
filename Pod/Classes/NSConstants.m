@@ -21,4 +21,7 @@ NSString * const kContentTypeData      = @"x-www-form-urlencoded";
 NSString * const kContentTypeJSON      = @"application/json";
 NSString * const kContentTypeMultipart = @"multipart/form-data";
 
+NSString * const kResponseHeadersKey          = @"kResponseHeadersDictionaryKey";
+NSString * const kResponseHeadersNotification = @"kNewResponseHeadersNotification";
+
 #endif

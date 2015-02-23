@@ -31,11 +31,16 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
                    {
-                       NSURLResponse *response = nil;
+                       NSHTTPURLResponse *response = nil;
                        NSError *error = nil;
                        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
                        
-                       NSUInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
+                       NSUInteger statusCode = response.statusCode;
+                       // Post Response Headers
+                       [[NSNotificationCenter defaultCenter] postNotificationName:kResponseHeadersNotification
+                                                                           object:self
+                                                                         userInfo:@{kResponseHeadersKey : response.allHeaderFields}];
+                       
                        // Try parsing as JSON
                        id parsedObject = [[self class] jsonObjectFromData:responseData];
                        

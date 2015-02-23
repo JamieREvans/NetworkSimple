@@ -8,4 +8,5 @@ target 'Tests', :exclusive => true do
   pod "NetworkSimple", :path => "../"
 
   pod 'Kiwi'
+  pod 'OCMock', '3.1.2'
 end

@@ -6,7 +6,8 @@
 //  Copyright (c) 2015 Jamie Evans. All rights reserved.
 //
 
-#import "Kiwi.h"
+#import <Kiwi.h>
+#import <OCMock.h>
 #import "NSClient+Parsing.h"
 #import "NSClient+Request.h"
 
@@ -24,26 +25,32 @@ describe(@"When allocating the client", ^
            [[client.host should] equal:@"api.randomuser.me"];
        });
     
-    it(@"a basic request should return data and a status code", ^
-       {
-           __block id responseObject = nil;
-           __block NSNumber *statusCode = nil;
-           
-           // Client request
-           [client sendRequestWithEndpoint:[NSClient stringFromParameters:@{@"results" : @20}]
-                            httpMethodType:NSHTTPMethodTypeGet
-                               requestType:NSRequestTypeURL
-                                dataObject:nil
-                      requestMutationBlock:nil
-                               andCallback:^(NSUInteger _statusCode, id _responseObject, NSError *error)
-            {
-                responseObject = _responseObject;
-                statusCode = @(_statusCode);
-            }];
-           
-           [[expectFutureValue(responseObject) shouldEventuallyBeforeTimingOutAfter(4.0f)] beNonNil];
-           [[expectFutureValue(statusCode) shouldEventuallyBeforeTimingOutAfter(4.0f)] beGreaterThan:@0];
-       });
+    describe(@"and firing off a basic request", ^
+             {
+                 __block id responseObject = nil;
+                 __block NSNumber *statusCode = nil;
+                 
+                 beforeEach(^
+                            {
+                                // Client request
+                                [client sendRequestWithEndpoint:[NSClient stringFromParameters:@{@"results" : @20}]
+                                                 httpMethodType:NSHTTPMethodTypeGet
+                                                    requestType:NSRequestTypeURL
+                                                     dataObject:nil
+                                           requestMutationBlock:nil
+                                                    andCallback:^(NSUInteger _statusCode, id _responseObject, NSError *error)
+                                 {
+                                     responseObject = _responseObject;
+                                     statusCode = @(_statusCode);
+                                 }];
+                            });
+                 
+                 it(@"should return data and a status code", ^
+                    {
+                        [[expectFutureValue(responseObject) shouldEventuallyBeforeTimingOutAfter(4.0f)] beNonNil];
+                        [[expectFutureValue(statusCode) shouldEventuallyBeforeTimingOutAfter(4.0f)] beGreaterThan:@0];
+                    });
+             });
 });
 
 SPEC_END

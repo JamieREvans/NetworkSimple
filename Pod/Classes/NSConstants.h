@@ -21,6 +21,9 @@ NSString * const kContentTypeData;
 NSString * const kContentTypeJSON;
 NSString * const kContentTypeMultipart;
 
+NSString * const kResponseHeadersKey;
+NSString * const kResponseHeadersNotification;
+
 typedef void(^NSResponseCallback)(NSUInteger statusCode, id responseObject, NSError *error);
 // Used for mutating NSMutableURLRequest before firing
 typedef void(^NSURLRequestMutationBlock)(NSMutableURLRequest *request);
