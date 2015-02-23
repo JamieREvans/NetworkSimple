@@ -31,24 +31,37 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
                    {
-                       NSHTTPURLResponse *response = nil;
-                       NSError *error = nil;
-                       NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-                       
-                       NSUInteger statusCode = response.statusCode;
-                       // Post Response Headers
-                       [[NSNotificationCenter defaultCenter] postNotificationName:kResponseHeadersNotification
-                                                                           object:self
-                                                                         userInfo:@{kResponseHeadersKey : response.allHeaderFields}];
-                       
-                       // Try parsing as JSON
-                       id parsedObject = [[self class] jsonObjectFromData:responseData];
-                       
-                       if(callback)
+                       @try
+                       {
+                           NSHTTPURLResponse *response = nil;
+                           NSError *error = nil;
+                           NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+                           
+                           NSUInteger statusCode = response.statusCode;
+                           // Post Response Headers
+                           if(response.allHeaderFields)
+                           {
+                               [[NSNotificationCenter defaultCenter] postNotificationName:kResponseHeadersNotification
+                                                                                   object:self
+                                                                                 userInfo:@{kResponseHeadersKey : response.allHeaderFields}];
+                           }
+                           
+                           // Try parsing as JSON
+                           id parsedObject = [[self class] jsonObjectFromData:responseData];
+                           
+                           if(callback)
+                           {
+                               dispatch_async(dispatch_get_main_queue(), ^
+                                              {
+                                                  callback(statusCode, parsedObject, error);
+                                              });
+                           }
+                       }
+                       @catch(NSException *exception)
                        {
                            dispatch_async(dispatch_get_main_queue(), ^
                                           {
-                                              callback(statusCode, parsedObject, error);
+                                              callback(400, nil, [NSError errorWithDomain:@"NSClient Request Exception" code:400 userInfo:@{@"exception" : exception}]);
                                           });
                        }
                    });
