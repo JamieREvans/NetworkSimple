@@ -29,32 +29,57 @@
         return;
     }
     
+    __block typeof(self) selfBlockReference = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
                    {
                        @try
                        {
-                           NSHTTPURLResponse *response = nil;
-                           NSError *error = nil;
+                           NSHTTPURLResponse *response;
+                           NSError *error;
                            NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
                            
                            NSUInteger statusCode = response.statusCode;
+                           
+                           // If the url has changed, but not set a redirect status code, change the status code
+                           if(![request.URL.absoluteString isEqualToString:response.URL.absoluteString] && statusCode < 300 && statusCode >= 200)
+                           {
+                               statusCode = 303;
+                           }
+                           
                            // Post Response Headers
                            if(response.allHeaderFields)
                            {
                                [[NSNotificationCenter defaultCenter] postNotificationName:kResponseHeadersNotification
-                                                                                   object:self
+                                                                                   object:selfBlockReference
                                                                                  userInfo:@{kResponseHeadersKey : response.allHeaderFields}];
                            }
                            
                            // Try parsing as JSON
-                           id parsedObject = [[self class] jsonObjectFromData:responseData];
+                           id parsedObject = [[selfBlockReference class] jsonObjectFromData:responseData];
                            
-                           if(callback)
+                           void (^sendCallback)() = ^
                            {
-                               dispatch_async(dispatch_get_main_queue(), ^
-                                              {
-                                                  callback(statusCode, parsedObject, error);
-                                              });
+                               if(callback)
+                               {
+                                   dispatch_async(dispatch_get_main_queue(), ^
+                                                  {
+                                                      callback(statusCode, parsedObject, error);
+                                                  });
+                               }
+                           };
+                           
+                           // Handle authentication
+                           if(statusCode == 401 && selfBlockReference.authenticationFailureHandler)
+                           {
+                               // Check if the authentication failure handler wants to handle the response, otherwise calling back
+                               if(!selfBlockReference.authenticationFailureHandler(statusCode, parsedObject, request, callback, error))
+                               {
+                                   sendCallback();
+                               }
+                           }
+                           else
+                           {
+                               sendCallback();
                            }
                        }
                        @catch(NSException *exception)

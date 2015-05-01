@@ -19,6 +19,7 @@
 {
     [super viewDidLoad];
     
+    /*
     NSClient *client = [NSClient clientWithScheme:@"http" andHost:@"randomuser.me"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseHeadersHandler:) name:kResponseHeadersNotification object:client];
@@ -60,7 +61,7 @@
      }
                         andCallback:^(NSUInteger statusCode, id responseObject, NSError *error)
      {
-         if(statusCode == 200)
+         if(statusCode == 201)
          {
              // Created a user successfully!
          }
@@ -68,7 +69,7 @@
          {
              // Failed to create a user :(
          }
-    }];
+    }];*/
 }
 
 - (void)responseHeadersHandler:(NSNotification *)notification

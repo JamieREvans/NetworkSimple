@@ -1,6 +1,6 @@
 # NetworkSimple
 
-[![CI Status](https://travis-ci.org/JamieREvans/NetworkSimple.svg?style=flat)](https://travis-ci.org/Jamie Evans/NetworkSimple)
+[![CI Status](https://travis-ci.org/JamieREvans/NetworkSimple.svg?style=flat)](https://travis-ci.org/JamieREvans/NetworkSimple)
 [![Version](https://img.shields.io/cocoapods/v/NetworkSimple.svg?style=flat)](http://cocoadocs.org/docsets/NetworkSimple)
 [![License](https://img.shields.io/cocoapods/l/NetworkSimple.svg?style=flat)](http://cocoadocs.org/docsets/NetworkSimple)
 [![Platform](https://img.shields.io/cocoapods/p/NetworkSimple.svg?style=flat)](http://cocoadocs.org/docsets/NetworkSimple)
