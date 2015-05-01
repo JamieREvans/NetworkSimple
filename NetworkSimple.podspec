@@ -15,8 +15,5 @@ Pod::Spec.new do |s|
   s.dependency 'Reachability', '~> 3.2'
 
   s.source_files = 'Pod/Classes'
-  s.resource_bundles = {
-    'NetworkSimple' => ['Pod/Assets/*.png']
-  }
 	
 end
