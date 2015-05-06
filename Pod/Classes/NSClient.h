@@ -16,6 +16,12 @@
 @property (nonatomic) NSTimeInterval requestTimeout;
 @property (nonatomic) NSString *boundaryString;
 
+// This block is called when the request returns a 401
+// The block should return YES if it would like to handle the response itself
+// The block should return NO if it would like the original callback to fire normally with a 401
+// The block will be fired on the background thread
+@property (nonatomic, copy) NSResponseChallengeHandler authenticationFailureHandler;
+
 + (instancetype)clientWithScheme:(NSString *)scheme andHost:(NSString *)host;
 
 - (void)sendRequest:(NSMutableURLRequest *)request withResponseCallback:(NSResponseCallback)callback;

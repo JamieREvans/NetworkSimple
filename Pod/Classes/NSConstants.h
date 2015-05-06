@@ -9,22 +9,23 @@
 #ifndef NetworkSimple_NSConstants_h
 #define NetworkSimple_NSConstants_h
 
-NSString * const kContentLengthKey;
-NSString * const kContentTypeKey;
+extern NSString * const kContentLengthKey;
+extern NSString * const kContentTypeKey;
 
-NSString * const kHTTPMethodGet;
-NSString * const kHTTPMethodPost;
-NSString * const kHTTPMethodPut;
-NSString * const kHTTPMethodDelete;
+extern NSString * const kHTTPMethodGet;
+extern NSString * const kHTTPMethodPost;
+extern NSString * const kHTTPMethodPut;
+extern NSString * const kHTTPMethodDelete;
 
-NSString * const kContentTypeData;
-NSString * const kContentTypeJSON;
-NSString * const kContentTypeMultipart;
+extern NSString * const kContentTypeData;
+extern NSString * const kContentTypeJSON;
+extern NSString * const kContentTypeMultipart;
 
-NSString * const kResponseHeadersKey;
-NSString * const kResponseHeadersNotification;
+extern NSString * const kResponseHeadersKey;
+extern NSString * const kResponseHeadersNotification;
 
 typedef void(^NSResponseCallback)(NSUInteger statusCode, id responseObject, NSError *error);
+typedef BOOL(^NSResponseChallengeHandler)(NSUInteger statusCode, id responseObject, NSURLRequest *originalRequest, NSResponseCallback originalCallback, NSError *error);
 // Used for mutating NSMutableURLRequest before firing
 typedef void(^NSURLRequestMutationBlock)(NSMutableURLRequest *request);
 

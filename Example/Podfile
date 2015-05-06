@@ -1,4 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
+plugin 'slather'
 
 target 'NetworkSimple', :exclusive => true do
   pod "NetworkSimple", :path => "../"

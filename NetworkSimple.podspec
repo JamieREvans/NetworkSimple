@@ -1,10 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "NetworkSimple"
-  s.version          = "1.0.2"
+  s.version          = "1.1.0"
   s.summary          = "Simplifying all network requests"
-  s.description      = <<-DESC
-                       Sacrifice control for a whole new level of simplicity. All of your network requests with just one method.
-                       DESC
   s.homepage         = "https://github.com/JamieREvans/NetworkSimple"
   s.license          = 'MIT'
   s.author           = { "Jamie Evans" => "jamie.riley.evans@gmail.com" }
@@ -18,8 +15,5 @@ Pod::Spec.new do |s|
   s.dependency 'Reachability', '~> 3.2'
 
   s.source_files = 'Pod/Classes'
-  s.resource_bundles = {
-    'NetworkSimple' => ['Pod/Assets/*.png']
-  }
 	
 end
