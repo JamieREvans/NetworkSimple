@@ -4,8 +4,8 @@ podfile: Example/Podfile
 before_install:
 - gem i activesupport
 - gem install cocoapods
-- pod install --project-directory=Example
 - gem i slather --no-rdoc
+- pod install --project-directory=Example
 install:
 - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 script:
