@@ -10,6 +10,7 @@
 #import <OCMock.h>
 #import "NSClient+Parsing.h"
 #import "NSClient+Request.h"
+#import "Reachability.h"
 
 SPEC_BEGIN(NSClientSpec)
 
@@ -94,6 +95,42 @@ describe(@"When allocating the client", ^{
         });
     });
     
+    describe(@"when the network is down", ^{
+        
+        __block id reachabilityMock;
+        __block NSError *error;
+        __block NSUInteger statusCode;
+        __block id responseObject;
+        
+        beforeEach(^{
+            
+            reachabilityMock = OCMClassMock([Reachability class]);
+            OCMStub([reachabilityMock reachabilityForInternetConnection]).andReturn(reachabilityMock);
+            OCMStub([reachabilityMock isReachable]).andReturn(NO);
+            
+            [client sendRequest:nil withResponseCallback:^(NSUInteger _statusCode, id _responseObject, NSError *_error)
+             {
+                 statusCode = _statusCode;
+                 responseObject = _responseObject;
+                 error = _error;
+             }];
+        });
+        
+        afterEach(^{
+            
+            [reachabilityMock stopMocking];
+        });
+        
+        it(@"should callback immediately with an error with the reason 'Could not reach network.'", ^{
+            
+            [[theValue(statusCode) should] equal:theValue(0)];
+            [[responseObject should] beNil];
+            [[error should] beNonNil];
+            
+            [[error.domain should] equal:@"Could not reach network."];
+        });
+    });
+    
     describe(@"and firing a request that gets redirected, but returns a 200 status code - potentially misconfigured firewall", ^{
         
         __block NSNumber *statusCode;
@@ -103,10 +140,9 @@ describe(@"When allocating the client", ^{
             stubSynchronousRequestWithStatusCodeAndURL(200, @"http://not-the-same-url.com");
             
             sendRequestWithEndpointAndCallback(@"", ^(NSUInteger responseStatusCode, id responseObject, NSError *error)
-             {
-                 
-                 statusCode = @(responseStatusCode);
-             });
+                                               {
+                                                   statusCode = @(responseStatusCode);
+                                               });
         });
         
         it(@"should set the status code to 303", ^{
@@ -143,10 +179,10 @@ describe(@"When allocating the client", ^{
                 stubSynchronousRequestWithStatusCodeAndURL(401, @"http://someurl.com");
                 
                 sendRequestWithEndpointAndCallback(@"", ^(NSUInteger responseStatusCode, id responseObject, NSError *error)
-                 {
-                     callbackCalled = @YES;
-                     statusCode = @(responseStatusCode);
-                 });
+                                                   {
+                                                       callbackCalled = @YES;
+                                                       statusCode = @(responseStatusCode);
+                                                   });
             });
             
             it(@"should not call the callback", ^{
@@ -187,6 +223,212 @@ describe(@"When allocating the client", ^{
                 
                 [[expectFutureValue(authenticationBlockCalled) shouldEventuallyBeforeTimingOutAfter(0.5f)] equal:@NO];
             });
+        });
+    });
+    
+    describe(@"and setting an authentication handler that cannot handle authentication challenges", ^{
+        
+        __block BOOL authenticationBlockCalled;
+        
+        beforeEach(^{
+            
+            authenticationBlockCalled = NO;
+            
+            [client setAuthenticationFailureHandler:^BOOL (NSUInteger statusCode, id responseObject, NSURLRequest *originalRequest, NSResponseCallback originalCallback, NSError *error)
+             {
+                 authenticationBlockCalled = YES;
+                 
+                 return NO;
+             }];
+        });
+        
+        describe(@"when a request returns 401", ^{
+            
+            __block NSUInteger statusCode;
+            __block BOOL callbackCalled;
+            
+            beforeEach(^{
+                
+                callbackCalled = NO;
+                
+                stubSynchronousRequestWithStatusCodeAndURL(401, @"http://someurl.com");
+                
+                sendRequestWithEndpointAndCallback(@"", ^(NSUInteger responseStatusCode, id responseObject, NSError *error)
+                                                   {
+                                                       callbackCalled = YES;
+                                                       statusCode = responseStatusCode;
+                                                   });
+            });
+            
+            it(@"should call the callback", ^{
+                
+                [[expectFutureValue(theValue(callbackCalled)) shouldEventuallyBeforeTimingOutAfter(0.5f)] equal:theValue(YES)];
+            });
+            
+            it(@"should have called the authentication handler", ^{
+                
+                [[expectFutureValue(theValue(authenticationBlockCalled)) shouldEventuallyBeforeTimingOutAfter(0.5f)] equal:theValue(YES)];
+            });
+        });
+        
+        describe(@"when a request returns 200", ^{
+            
+            __block NSUInteger statusCode;
+            __block BOOL callbackCalled;
+            
+            beforeEach(^{
+                
+                callbackCalled = NO;
+                
+                stubSynchronousRequestWithStatusCodeAndURL(200, baseURL);
+                
+                sendRequestWithEndpointAndCallback(@"", ^(NSUInteger responseStatusCode, id responseObject, NSError *error)
+                                                   {
+                                                       callbackCalled = YES;
+                                                       statusCode = responseStatusCode;
+                                                   });
+            });
+            
+            it(@"should have called the callback", ^{
+                
+                [[expectFutureValue(theValue(callbackCalled)) shouldEventuallyBeforeTimingOutAfter(0.5f)] equal:theValue(YES)];
+            });
+            
+            it(@"should not have called the authentication handler", ^{
+                
+                [[expectFutureValue(theValue(authenticationBlockCalled)) shouldEventuallyBeforeTimingOutAfter(0.5f)] equal:theValue(NO)];
+            });
+        });
+    });
+    
+    describe(@"when an exception occurs in the request block", ^{
+        
+        __block NSUInteger statusCode;
+        __block BOOL callbackCalled;
+        __block NSError *exceptionError;
+        
+        beforeEach(^{
+            
+            stubSynchronousRequestWithStatusCodeAndURL(0, @"");
+            
+            statusCode = 0;
+            
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[[NSURL alloc] initWithScheme:client.scheme host:client.host path:@"/"]];
+            
+            id urlMock = OCMClassMock([NSURL class]);
+            OCMStub([urlMock absoluteString]).andThrow([NSException exceptionWithName:@"Some exception" reason:@"A reason" userInfo:@{}]);
+            id requestMock = OCMPartialMock(request);
+            OCMStub([requestMock URL]).andReturn(urlMock);
+            
+            [client sendRequest:request withResponseCallback:^(NSUInteger responseStatusCode, id responseObject, NSError *error)
+             {
+                 callbackCalled = YES;
+                 statusCode = responseStatusCode;
+                 exceptionError = error;
+             }];
+        });
+        
+        it(@"should return an error and a 400", ^{
+            
+            [[expectFutureValue(theValue(statusCode)) shouldEventuallyBeforeTimingOutAfter(0.5f)] equal:theValue(400)];
+            [[expectFutureValue(exceptionError) shouldEventuallyBeforeTimingOutAfter(0.5f)] beNonNil];
+        });
+    });
+    
+    describe(@"when sending a multipart POST request", ^{
+        
+        __block id clientPartialMock;
+        __block id requestMock;
+        
+        beforeEach(^{
+            
+            requestMock = OCMClassMock([NSMutableURLRequest class]);
+            
+            clientPartialMock = OCMPartialMock(client);
+            
+            OCMExpect([clientPartialMock requestWithURL:[OCMArg any] httpMethod:kHTTPMethodPost]).andReturn(requestMock);
+            OCMExpect([clientPartialMock dataFromMultipartObject:[OCMArg any]]).andForwardToRealObject();
+            OCMExpect([requestMock setValue:[client contentTypeWithRequestType:NSRequestTypeMultipart] forHTTPHeaderField:kContentTypeKey]);
+            OCMExpect([requestMock setHTTPBody:[OCMArg any]]);
+            OCMExpect([clientPartialMock sendRequest:requestMock withResponseCallback:nil]);
+            
+            [client sendRequestWithEndpoint:@""
+                             httpMethodType:NSHTTPMethodTypePost
+                                requestType:NSRequestTypeMultipart
+                                 dataObject:@{@"image" : @"not-actually-an-image"}
+                       requestMutationBlock:nil
+                                andCallback:nil];
+        });
+        
+        it(@"should have created a request with a POST type, set a multipart content type and a valid body", ^{
+            
+            OCMVerifyAll(clientPartialMock);
+            OCMVerifyAll(requestMock);
+        });
+    });
+    
+    describe(@"when sending a JSON PUT request", ^{
+        
+        __block id clientPartialMock;
+        __block id requestMock;
+        
+        beforeEach(^{
+            
+            requestMock = OCMClassMock([NSMutableURLRequest class]);
+            
+            clientPartialMock = OCMPartialMock(client);
+            
+            OCMExpect([clientPartialMock requestWithURL:[OCMArg any] httpMethod:kHTTPMethodPut]).andReturn(requestMock);
+            OCMExpect([clientPartialMock dataFromJSONObject:[OCMArg any]]).andForwardToRealObject();
+            OCMExpect([requestMock setValue:kContentTypeJSON forHTTPHeaderField:kContentTypeKey]);
+            OCMExpect([requestMock setHTTPBody:[OCMArg any]]);
+            OCMExpect([clientPartialMock sendRequest:requestMock withResponseCallback:nil]);
+            
+            [client sendRequestWithEndpoint:@""
+                             httpMethodType:NSHTTPMethodTypePut
+                                requestType:NSRequestTypeJSON
+                                 dataObject:@{@"image" : @"not-actually-an-image"}
+                       requestMutationBlock:nil
+                                andCallback:nil];
+        });
+        
+        it(@"should have created a request with a PUT type, set a json content type and a valid body", ^{
+            
+            OCMVerifyAll(clientPartialMock);
+            OCMVerifyAll(requestMock);
+        });
+    });
+    
+    describe(@"when sending a DELETE request", ^{
+        
+        __block id clientPartialMock;
+        __block id requestMock;
+        
+        beforeEach(^{
+            
+            requestMock = OCMClassMock([NSMutableURLRequest class]);
+            
+            clientPartialMock = OCMPartialMock(client);
+            
+            [[clientPartialMock reject] dataFromMultipartObject:[OCMArg any]];
+            [[clientPartialMock reject] dataFromJSONObject:[OCMArg any]];
+            [[requestMock reject] setValue:[OCMArg any] forHTTPHeaderField:[OCMArg any]];
+            [[requestMock reject] setHTTPBody:[OCMArg any]];
+            OCMExpect([clientPartialMock requestWithURL:[OCMArg any] httpMethod:kHTTPMethodDelete]).andReturn(requestMock);
+            OCMExpect([clientPartialMock sendRequest:requestMock withResponseCallback:nil]);
+            
+            [client sendRequestWithEndpoint:@""
+                             httpMethodType:NSHTTPMethodTypeDelete
+                                requestType:NSRequestTypeURL
+                                 dataObject:nil
+                       requestMutationBlock:nil
+                                andCallback:nil];
+        });
+        
+        it(@"should have created a request with a DELETE type and not called any extra methods", ^{
+            
+            OCMVerifyAll(clientPartialMock);
+            OCMVerifyAll(requestMock);
         });
     });
 });

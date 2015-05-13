@@ -25,6 +25,7 @@
 		7D53C4601A66CF1300A2845A /* NSClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D53C45F1A66CF1300A2845A /* NSClientTests.m */; };
 		7D53C4651A66DC6600A2845A /* NSClient+RequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D53C4641A66DC6600A2845A /* NSClient+RequestTests.m */; };
 		7D53C46F1A67488300A2845A /* NSClient+ParsingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D53C46E1A67488300A2845A /* NSClient+ParsingTests.m */; };
+		7DC33A561B02CB7B0008667A /* sample.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC33A551B02CB7B0008667A /* sample.png */; };
 		8D8FAB9238212F1C47AEF3E1 /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84994669B42356E947C3DD7D /* libPods-Tests.a */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +69,7 @@
 		7D53C45F1A66CF1300A2845A /* NSClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSClientTests.m; sourceTree = "<group>"; };
 		7D53C4641A66DC6600A2845A /* NSClient+RequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSClient+RequestTests.m"; sourceTree = "<group>"; };
 		7D53C46E1A67488300A2845A /* NSClient+ParsingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSClient+ParsingTests.m"; sourceTree = "<group>"; };
+		7DC33A551B02CB7B0008667A /* sample.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sample.png; sourceTree = "<group>"; };
 		84994669B42356E947C3DD7D /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BF82F50461BD2B0E43DD714 /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		FEA2F862D0317454DAF04245 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 		6003F594195388D20070C39A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7DC33A551B02CB7B0008667A /* sample.png */,
 				6003F595195388D20070C39A /* NetworkSimple-Info.plist */,
 				6003F596195388D20070C39A /* InfoPlist.strings */,
 				6003F599195388D20070C39A /* main.m */,
@@ -286,6 +289,7 @@
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F5A1195388D20070C39A /* Main_iPhone.storyboard in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
+				7DC33A561B02CB7B0008667A /* sample.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
