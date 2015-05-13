@@ -206,4 +206,78 @@ describe(@"when parsing multipart", ^{
     });
 });
 
+describe(@"Parsing data", ^{
+    
+    __block NSClient *client;
+    __block id clientPartialMock;
+    __block id objectToParse;
+    
+    beforeEach(^{
+        
+        client = [NSClient clientWithScheme:@"" andHost:@""];
+        clientPartialMock = OCMPartialMock(client);
+        objectToParse = OCMClassMock([NSObject class]);
+    });
+    
+    describe(@"when parsing json", ^{
+        
+        beforeEach(^{
+            
+            OCMExpect([clientPartialMock dataFromJSONObject:objectToParse]);
+            
+            [client dataFromObject:objectToParse withRequestType:NSRequestTypeJSON];
+        });
+        
+        it(@"should do something", ^{
+            
+            OCMVerifyAll(clientPartialMock);
+        });
+    });
+    
+    describe(@"when parsing multipart", ^{
+        
+        beforeEach(^{
+            
+            OCMExpect([clientPartialMock dataFromMultipartObject:objectToParse]);
+            
+            [client dataFromObject:objectToParse withRequestType:NSRequestTypeMultipart];
+        });
+        
+        it(@"should have called dataFromMultipartObject:", ^{
+            
+            OCMVerifyAll(clientPartialMock);
+        });
+    });
+    
+    describe(@"when parsing raw data", ^{
+        
+        __block id returnValue;
+        
+        beforeEach(^{
+            
+            returnValue = [client dataFromObject:objectToParse withRequestType:NSRequestTypeData];
+        });
+        
+        it(@"should return the data object exactly as is", ^{
+            
+            [[returnValue should] equal:objectToParse];
+        });
+    });
+    
+    describe(@"when passed an invalid request type", ^{
+        
+        __block id returnValue;
+        
+        beforeEach(^{
+            
+            returnValue = [client dataFromObject:objectToParse withRequestType:5];
+        });
+        
+        it(@"should return nil", ^{
+            
+            [[returnValue should] beNil];
+        });
+    });
+});
+
 SPEC_END

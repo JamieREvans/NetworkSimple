@@ -431,6 +431,38 @@ describe(@"When allocating the client", ^{
             OCMVerifyAll(requestMock);
         });
     });
+    
+    describe(@"when sending a request with a mutation block", ^{
+        
+        __block BOOL mutationBlockCalled;
+        __block NSMutableURLRequest *urlRequest;
+        __block id clientPartialMock;
+        
+        beforeEach(^{
+            
+            mutationBlockCalled = NO;
+            
+            clientPartialMock = OCMPartialMock(client);
+            OCMExpect([clientPartialMock sendRequest:[OCMArg any] withResponseCallback:nil]);
+            
+            [client sendRequestWithEndpoint:@""
+                             httpMethodType:NSHTTPMethodTypeGet
+                                requestType:NSRequestTypeURL
+                                 dataObject:nil
+                       requestMutationBlock:^(NSMutableURLRequest *request)
+             {
+                 mutationBlockCalled = YES;
+                 urlRequest = request;
+             }
+                                andCallback:nil];
+        });
+        
+        it(@"should call the mutation block with a valid request", ^{
+            
+            [[theValue(mutationBlockCalled) should] equal:theValue(YES)];
+            [[theValue([urlRequest isKindOfClass:[NSMutableURLRequest class]]) should] equal:theValue(YES)];
+        });
+    });
 });
 
 SPEC_END
