@@ -59,4 +59,56 @@ describe(@"When creating a request with parameters", ^
        });
 });
 
+describe(@"When getting content types", ^{
+    
+    it(@"should return x-www-form-urlencoded for NSRequestTypeData", ^{
+        
+        [[[[NSClient new] contentTypeWithRequestType:NSRequestTypeData] should] equal:kContentTypeData];
+    });
+    
+    it(@"should return application/json for NSRequestTypeJSON", ^{
+        
+        [[[[NSClient new] contentTypeWithRequestType:NSRequestTypeJSON] should] equal:kContentTypeJSON];
+    });
+    
+    it(@"should return a multitype boundary for NSRequestTypeMultipart", ^{
+        
+        NSClient *client = [NSClient new];
+        [[[client contentTypeWithRequestType:NSRequestTypeMultipart] should] equal:[NSString stringWithFormat:@"%@; boundary=%@", kContentTypeMultipart, client.boundaryString]];
+    });
+    
+    it(@"should return nil for an invalid NSRequestType", ^{
+        
+        [[[[NSClient new] contentTypeWithRequestType:100] should] beNil];
+    });
+});
+
+describe(@"When getting http methods", ^{
+    
+    it(@"should return GET for NSHTTPMethodGet", ^{
+        
+        [[[[NSClient new] httpMethodFromType:NSHTTPMethodTypeGet] should] equal:kHTTPMethodGet];
+    });
+    
+    it(@"should return POST for NSHTTPMethodTypePost", ^{
+        
+        [[[[NSClient new] httpMethodFromType:NSHTTPMethodTypePost] should] equal:kHTTPMethodPost];
+    });
+    
+    it(@"should return PUT for NSHTTPMethodTypePut", ^{
+        
+        [[[[NSClient new] httpMethodFromType:NSHTTPMethodTypePut] should] equal:kHTTPMethodPut];
+    });
+    
+    it(@"should return DELETE for NSHTTPMethodDelete", ^{
+        
+        [[[[NSClient new] httpMethodFromType:NSHTTPMethodTypeDelete] should] equal:kHTTPMethodDelete];
+    });
+    
+    it(@"should return nil for an invalid NSHTTPMethodType", ^{
+        
+        [[[[NSClient new] httpMethodFromType:100] should] beNil];
+    });
+});
+
 SPEC_END
