@@ -159,7 +159,7 @@ describe(@"When allocating the client", ^{
             
             authenticationBlockCalled = @NO;
             
-            [client setAuthenticationFailureHandler:^BOOL (NSUInteger statusCode, id responseObject, NSURLRequest *originalRequest, NSResponseCallback originalCallback, NSError *error)
+            [client setAuthenticationFailureHandler:^BOOL (NSUInteger statusCode, id responseObject, NSMutableURLRequest *originalRequest, NSResponseCallback originalCallback, NSError *error)
              {
                  authenticationBlockCalled = @YES;
                  

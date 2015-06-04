@@ -25,7 +25,7 @@ extern NSString * const kResponseHeadersKey;
 extern NSString * const kResponseHeadersNotification;
 
 typedef void(^NSResponseCallback)(NSUInteger statusCode, id responseObject, NSError *error);
-typedef BOOL(^NSResponseChallengeHandler)(NSUInteger statusCode, id responseObject, NSURLRequest *originalRequest, NSResponseCallback originalCallback, NSError *error);
+typedef BOOL(^NSResponseChallengeHandler)(NSUInteger statusCode, id responseObject, NSMutableURLRequest *originalRequest, NSResponseCallback originalCallback, NSError *error);
 // Used for mutating NSMutableURLRequest before firing
 typedef void(^NSURLRequestMutationBlock)(NSMutableURLRequest *request);
 
