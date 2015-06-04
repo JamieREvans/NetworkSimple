@@ -278,6 +278,24 @@ describe(@"Parsing data", ^{
             [[returnValue should] beNil];
         });
     });
+    
+    describe(@"when parsing image data from a JSON request", ^{
+        
+        __block id returnValue;
+        
+        beforeEach(^{
+            
+            id jsonSerializationClassMock = OCMClassMock([NSJSONSerialization class]);
+            OCMStub([[jsonSerializationClassMock JSONObjectWithData:[OCMArg any] options:0 error:(NSError * __autoreleasing *)[OCMArg anyPointer]] ignoringNonObjectArgs]).andReturn(nil);
+            
+            returnValue = [[client class] jsonObjectFromData:UIImageJPEGRepresentation([UIImage imageNamed:@"sample.png"], 1.0)];
+        });
+        
+        it(@"should return data", ^{
+            
+            [[returnValue should] beKindOfClass:[NSData class]];
+        });
+    });
 });
 
 SPEC_END

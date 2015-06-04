@@ -116,7 +116,8 @@ const NSString * kContentDispositionKey = @"Content-Disposition";
 {
     return (!data ? nil :
             ([NSJSONSerialization JSONObjectWithData:data options:0 error:nil removingNulls:YES ignoreArrays:NO] ? :
-             [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]));
+             ([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] ? :
+              data)));
 }
 
 @end
