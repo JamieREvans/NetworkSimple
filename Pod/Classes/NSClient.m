@@ -14,10 +14,24 @@
 
 + (instancetype)clientWithScheme:(NSString *)scheme andHost:(NSString *)host
 {
+    return [self clientWithBaseURL:[[NSURL alloc] initWithScheme:scheme host:host path:@"/"]];
+}
+
++ (instancetype)clientWithBaseURL:(NSURL *)url
+{
+    if(url.path.length > 0 && ![url.absoluteString hasSuffix:@"/"])
+    {
+        url = [url URLByAppendingPathComponent:@""];
+    }
+    
     NSClient *client = [self new];
-    [client setScheme:scheme];
-    [client setHost:host];
+    [client setBaseURL:url];
     return client;
+}
+
+- (void)setBaseURL:(NSURL *)baseURL
+{
+    _baseURL = baseURL;
 }
 
 - (void)sendRequest:(NSMutableURLRequest *)request withResponseCallback:(NSResponseCallback)callback

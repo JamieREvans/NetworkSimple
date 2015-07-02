@@ -9,4 +9,10 @@
 #import "NSAppDelegate.h"
 
 @implementation NSAppDelegate
+
+- (void)applicationDidFinishLaunching:(UIApplication *)application
+{
+    NSLog(@"%@", [[[NSURL alloc] initWithScheme:@"http" host:@"google.ca" path:@"/api"] URLByAppendingPathComponent:@"?jamie=NO"].absoluteString);
+}
+
 @end

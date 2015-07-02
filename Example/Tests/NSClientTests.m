@@ -58,10 +58,9 @@ describe(@"When allocating the client", ^{
         baseURL = [client urlWithEndpoint:@""].absoluteString;
     });
     
-    it(@"the host and scheme should be set", ^{
+    it(@"the baseURL should be set", ^{
         
-        [[client.scheme should] equal:@"http"];
-        [[client.host should] equal:@"api.randomuser.me"];
+        [[client.baseURL.absoluteString should] equal:@"http://api.randomuser.me/"];
     });
     
     describe(@"and firing off a basic request", ^{
@@ -313,7 +312,7 @@ describe(@"When allocating the client", ^{
             
             statusCode = 0;
             
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[[NSURL alloc] initWithScheme:client.scheme host:client.host path:@"/"]];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:client.baseURL];
             
             id urlMock = OCMClassMock([NSURL class]);
             OCMStub([urlMock absoluteString]).andThrow([NSException exceptionWithName:@"Some exception" reason:@"A reason" userInfo:@{}]);
@@ -462,6 +461,21 @@ describe(@"When allocating the client", ^{
             [[theValue(mutationBlockCalled) should] equal:theValue(YES)];
             [[theValue([urlRequest isKindOfClass:[NSMutableURLRequest class]]) should] equal:theValue(YES)];
         });
+    });
+});
+
+describe(@"when creating a client with a base path", ^{
+    
+    __block NSClient *subject;
+    
+    beforeEach(^{
+        
+        subject = [NSClient clientWithBaseURL:[[NSURL alloc] initWithScheme:@"http" host:@"google.ca" path:@"/api"]];
+    });
+    
+    it(@"should have the correct baseURL", ^{
+        
+        [[subject.baseURL.absoluteString should] equal:@"http://google.ca/api/"];
     });
 });
 

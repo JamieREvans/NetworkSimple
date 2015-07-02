@@ -111,4 +111,19 @@ describe(@"When getting http methods", ^{
     });
 });
 
+describe(@"when creating a client with a base path", ^{
+    
+    __block NSClient *subject;
+    
+    beforeEach(^{
+        
+        subject = [NSClient clientWithBaseURL:[[NSURL alloc] initWithScheme:@"http" host:@"google.ca" path:@"/api"]];
+    });
+    
+    it(@"should create a url with the correct path", ^{
+        
+        [[[subject urlWithEndpoint:@"endpoint"].absoluteString should] equal:@"http://google.ca/api/endpoint"];
+    });
+});
+
 SPEC_END

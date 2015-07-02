@@ -18,10 +18,8 @@
 
 - (NSURL *)urlWithEndpoint:(NSString *)endpoint andParameters:(NSDictionary *)parameters
 {
-    NSString *path = [NSString stringWithFormat:@"/%@%@", endpoint ? : @"", (parameters.allKeys.count ? [[self class] stringFromParameters:parameters] : @"")];
-    return [[NSURL alloc] initWithScheme:self.scheme
-                                    host:self.host
-                                    path:path];
+    NSString *path = [NSString stringWithFormat:@"%@%@", endpoint ? : @"", (parameters.allKeys.count ? [[self class] stringFromParameters:parameters] : @"")];
+    return [NSURL URLWithString:path relativeToURL:self.baseURL];
 }
 
 - (NSString *)contentTypeWithRequestType:(NSRequestType)requestType
