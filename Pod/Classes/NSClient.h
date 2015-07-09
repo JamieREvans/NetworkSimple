@@ -15,6 +15,7 @@
 @property (nonatomic) NSURLRequestCachePolicy cachingPolicy;
 @property (nonatomic) NSTimeInterval requestTimeout;
 @property (nonatomic) NSString *boundaryString;
+@property (nonatomic) NSMultipartImageType imageType;
 
 /**
  * @discussion This block is called when the request returns a 401. The block should return YES if it would like to handle the response itself. The block should return NO if it would like the original callback to fire normally with a 401. The block will be fired on the background thread.

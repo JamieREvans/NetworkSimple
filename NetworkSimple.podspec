@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "NetworkSimple"
-  s.version          = "1.1.2"
+  s.version          = "1.1.3"
   s.summary          = "Simplifying all network requests"
   s.homepage         = "https://github.com/JamieREvans/NetworkSimple"
   s.license          = 'MIT'

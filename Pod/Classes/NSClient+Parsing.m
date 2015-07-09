@@ -55,8 +55,24 @@ const NSString * kContentDispositionKey = @"Content-Disposition";
         }
         else if([object isKindOfClass:IMAGE_CLASS])
         {
-            [multipartString appendFormat:@"%@: form-data; name=\"%@\"; filename=\"webshare.jpg\"%@", kContentDispositionKey, key, lineBreakString];
-            [multipartString appendFormat:@"%@: image/jpeg%@%@", kContentTypeKey, lineBreakString, lineBreakString];
+            NSString *fileExtention = nil;
+            NSString *contentType = nil;
+            switch(self.imageType)
+            {
+                case NSMultipartImageTypeJPG:
+                {
+                    fileExtention = @"jpg";
+                    contentType = @"jpeg";
+                    break;
+                }
+                case NSMultipartImageTypePNG:
+                {
+                    fileExtention = contentType = @"png";
+                    break;
+                }
+            }
+            [multipartString appendFormat:@"%@: form-data; name=\"%@\"; filename=\"webshare.%@\"%@", kContentDispositionKey, key, fileExtention, lineBreakString];
+            [multipartString appendFormat:@"%@: image/%@%@%@", kContentTypeKey, contentType, lineBreakString, lineBreakString];
             [multipartData appendData:[[self class] dataFromString:multipartString]];
             
 #if TARGET_OS_IPHONE

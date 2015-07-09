@@ -45,4 +45,10 @@ typedef NS_ENUM(NSUInteger, NSHTTPMethodType)
     NSHTTPMethodTypeDelete
 };
 
+typedef NS_ENUM(NSUInteger, NSMultipartImageType)
+{
+    NSMultipartImageTypeJPG,
+    NSMultipartImageTypePNG
+};
+
 #endif
