@@ -15,5 +15,4 @@ Pod::Spec.new do |s|
   s.dependency 'Reachability', '~> 3.2'
 
   s.source_files = 'Pod/Classes'
-	
 end
